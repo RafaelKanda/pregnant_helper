@@ -26,7 +26,7 @@ class CardWithDate extends StatelessWidget {
               context: context,
               builder: (context) => AlertDialog(
                 title: const Text(
-                  'Deseja excluir essa consulta?',
+                  'Deseja excluir?',
                   style: AppTheme.titleSmallStyle,
                   textAlign: TextAlign.center,
                 ),

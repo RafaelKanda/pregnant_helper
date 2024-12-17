@@ -8,8 +8,8 @@ import 'package:flutter_getit/flutter_getit.dart';
 class ProfileDataModule extends FlutterGetItModule {
   @override
   List<Bind<Object>> get bindings => [
-        Bind.lazySingleton<ProfileRepository>((i) => ProfileRepositoryImpl()),
-        Bind.lazySingleton(
+        Bind.singleton<ProfileRepository>((i) => ProfileRepositoryImpl()),
+        Bind.singleton(
           (i) => ProfileDataController(
             gestationRepository: i(),
             profileRepository: i(),

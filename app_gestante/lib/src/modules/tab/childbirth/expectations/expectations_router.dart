@@ -10,9 +10,9 @@ class ExpectationsRouter extends FlutterGetItModulePageRouter {
 
   @override
   List<Bind<Object>> get bindings => [
-        Bind.lazySingleton<ExpectationsRepository>(
+        Bind.singleton<ExpectationsRepository>(
             (i) => ExpectationsRepositoryImpl()),
-        Bind.lazySingleton((i) => ExpectationsController(repository: i())),
+        Bind.singleton((i) => ExpectationsController(repository: i())),
       ];
 
   @override

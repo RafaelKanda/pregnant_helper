@@ -12,9 +12,8 @@ import 'package:flutter_getit/flutter_getit.dart';
 class TabModule extends FlutterGetItModule {
   @override
   List<Bind<Object>> get bindings => [
-        Bind.lazySingleton<GestationRepository>(
-            (i) => GestationRepositoryImpl()),
-        Bind.lazySingleton(
+        Bind.singleton<GestationRepository>((i) => GestationRepositoryImpl()),
+        Bind.singleton(
           (i) => CustomTabController(gestationRepository: i()),
         ),
       ];
@@ -25,7 +24,7 @@ class TabModule extends FlutterGetItModule {
   @override
   Map<String, WidgetBuilder> get pages => {
         '/': (context) => const TabPage(),
-        '/home': (context) => const HomeRouter(),
+        '/homes': (context) => const HomeRouter(),
         '/more': (context) => const ChildbirthRouter(),
         '/gestation': (context) => const GestationRouter(),
         '/profile': (context) => const ProfileRouter(),

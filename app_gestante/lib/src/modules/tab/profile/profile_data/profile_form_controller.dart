@@ -10,6 +10,7 @@ mixin ProfileFormController on State<ProfileDataPage> {
   final nationalHealthCardEC = TextEditingController();
   final prenatalPlaceEC = TextEditingController();
   final emailEC = TextEditingController();
+  final maritalStatusEC = TextEditingController();
   final incomeEC = TextEditingController();
   final educationEC = TextEditingController();
 
@@ -21,6 +22,7 @@ mixin ProfileFormController on State<ProfileDataPage> {
     nationalHealthCardEC.dispose();
     prenatalPlaceEC.dispose();
     emailEC.dispose();
+    maritalStatusEC.dispose();
     incomeEC.dispose();
     educationEC.dispose();
   }

@@ -10,9 +10,9 @@ class CurrentGestationRouter extends FlutterGetItModulePageRouter {
 
   @override
   List<Bind<Object>> get bindings => [
-        Bind.lazySingleton<CurrentGestationRepository>(
+        Bind.singleton<CurrentGestationRepository>(
             (i) => CurrentGestationRepositoryImpl()),
-        Bind.lazySingleton((i) => CurrentGestationController(repository: i())),
+        Bind.singleton((i) => CurrentGestationController(repository: i())),
       ];
 
   @override

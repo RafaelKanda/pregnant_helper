@@ -10,10 +10,10 @@ class VaccinesRouter extends FlutterGetItModulePageRouter {
 
   @override
   List<Bind<Object>> get bindings => [
-        Bind.lazySingleton<VaccinesRepository>(
+        Bind.singleton<VaccinesRepository>(
           (i) => VaccinesRepositoryImpl(),
         ),
-        Bind.lazySingleton(
+        Bind.singleton(
           (i) => VaccinesController(
             repository: i(),
           ),

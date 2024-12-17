@@ -1,6 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:developer';
+
 import 'package:app_core/app_core.dart';
 import 'package:app_gestante/src/core/app_database.dart';
+import 'package:app_gestante/src/model/gestation/pregnant_model.dart';
 import 'package:app_gestante/src/repositories/gestation/gestation_repository.dart';
 import 'package:app_gestante/src/repositories/profile/profile_repository.dart';
 import 'package:signals_flutter/signals_flutter.dart';
@@ -14,8 +17,6 @@ class ProfileDataController with MessageStateMixin {
 
   UserData? _user;
   UserData? get user => _user;
-
-  String? _errorMessage;
 
   ProfileDataController({
     required GestationRepository gestationRepository,
@@ -33,10 +34,6 @@ class ProfileDataController with MessageStateMixin {
   Future<void> initialize() async {
     await getGestationElements();
     await getUserElements();
-    if (_errorMessage != null) {
-      showError(_errorMessage!);
-      _errorMessage == null;
-    }
   }
 
   Future<void> getGestationElements() async {
@@ -44,7 +41,7 @@ class ProfileDataController with MessageStateMixin {
 
     switch (result) {
       case Left():
-        _errorMessage = 'Falha ao buscar dados';
+        log('Falha ao buscar dados');
       case Right(value: final gestation):
         _pregnant = gestation;
     }
@@ -55,9 +52,44 @@ class ProfileDataController with MessageStateMixin {
 
     switch (result) {
       case Left():
-        _errorMessage = 'Falha ao buscar dados';
+        log('Falha ao buscar dados');
       case Right(value: final user):
         _user = user;
+    }
+  }
+
+  Future<bool> saveProfile(PregnantModel pregnant, UserData user) async {
+    List<bool> hasError = [false, false];
+    hasError[0] = await _saveGestation(pregnant);
+    hasError[1] = await _saveUser(user);
+    if (hasError[0] || hasError[1]) {
+      showError('Falha ao salvar os dados');
+      return false;
+    } else {
+      showSuccess('Dados salvos');
+      return true;
+    }
+  }
+
+  Future<bool> _saveGestation(PregnantModel pregnant) async {
+    final result = await _gestationRepository.updatePregnant(pregnant);
+
+    switch (result) {
+      case Left():
+        return true;
+      case Right():
+        return false;
+    }
+  }
+
+  Future<bool> _saveUser(UserData user) async {
+    final result = await _profileRepository.updateUser(user);
+
+    switch (result) {
+      case Left():
+        return true;
+      case Right():
+        return false;
     }
   }
 }

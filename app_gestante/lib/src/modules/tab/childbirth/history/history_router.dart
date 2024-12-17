@@ -10,8 +10,8 @@ class HistoryRouter extends FlutterGetItModulePageRouter {
 
   @override
   List<Bind<Object>> get bindings => [
-        Bind.lazySingleton<HistoryRepository>((i) => HistoryRepositoryImpl()),
-        Bind.lazySingleton((i) => HistoryController(repository: i())),
+        Bind.singleton<HistoryRepository>((i) => HistoryRepositoryImpl()),
+        Bind.singleton((i) => HistoryController(repository: i())),
       ];
 
   @override

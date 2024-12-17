@@ -50,12 +50,10 @@ class AppDatabase extends _$AppDatabase {
           await m.createAll();
         },
         onUpgrade: (Migrator m, int from, int to) async {
-          if (from < 2) {
-            await m.createAll();
-          }
+          await m.createAll();
         },
       );
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 }

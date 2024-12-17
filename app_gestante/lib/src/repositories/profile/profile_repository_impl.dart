@@ -28,6 +28,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
             UserCompanion(
               id: const Value(1),
               education: Value(user.education),
+              maritalStatus: Value(user.maritalStatus),
               email: Value(user.email),
               familyIncome: Value(user.familyIncome),
             ),
@@ -48,6 +49,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
       await (db.update(db.user)..where((p) => p.id.equals(1)))
           .write(UserCompanion(
         education: Value(user.education),
+        maritalStatus: Value(user.maritalStatus),
         email: Value(user.email),
         familyIncome: Value(user.familyIncome),
       ));

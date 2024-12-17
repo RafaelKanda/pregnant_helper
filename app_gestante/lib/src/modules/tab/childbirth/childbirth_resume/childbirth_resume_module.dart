@@ -1,5 +1,5 @@
 import 'package:app_gestante/src/modules/tab/childbirth/childbirth_resume/childbirth_resume_controller.dart';
-import 'package:app_gestante/src/modules/tab/childbirth/childbirth_resume/childbirth_resume_page2.dart';
+import 'package:app_gestante/src/modules/tab/childbirth/childbirth_resume/childbirth_resume_page.dart';
 import 'package:app_gestante/src/repositories/current_gestation/current_gestation_repository.dart';
 import 'package:app_gestante/src/repositories/current_gestation/current_gestation_repository_impl.dart';
 import 'package:app_gestante/src/repositories/expectations/expectations_repository.dart';
@@ -15,12 +15,12 @@ class ChildbirthResumeModule extends FlutterGetItModule {
 
   @override
   List<Bind<Object>> get bindings => [
-        Bind.lazySingleton<HistoryRepository>((i) => HistoryRepositoryImpl()),
-        Bind.lazySingleton<CurrentGestationRepository>(
+        Bind.singleton<HistoryRepository>((i) => HistoryRepositoryImpl()),
+        Bind.singleton<CurrentGestationRepository>(
             (i) => CurrentGestationRepositoryImpl()),
-        Bind.lazySingleton<ExpectationsRepository>(
+        Bind.singleton<ExpectationsRepository>(
             (i) => ExpectationsRepositoryImpl()),
-        Bind.lazySingleton((i) => ChildbirthResumeController()),
+        Bind.singleton((i) => ChildbirthResumeController()),
       ];
 
   @override

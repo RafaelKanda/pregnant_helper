@@ -4320,6 +4320,13 @@ class $UserTable extends User with TableInfo<$UserTable, UserData> {
   late final GeneratedColumn<String> email = GeneratedColumn<String>(
       'email', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _maritalStatusMeta =
+      const VerificationMeta('maritalStatus');
+  @override
+  late final GeneratedColumnWithTypeConverter<MaritalStatus?, int>
+      maritalStatus = GeneratedColumn<int>('marital_status', aliasedName, true,
+              type: DriftSqlType.int, requiredDuringInsert: false)
+          .withConverter<MaritalStatus?>($UserTable.$convertermaritalStatusn);
   static const VerificationMeta _educationMeta =
       const VerificationMeta('education');
   @override
@@ -4335,7 +4342,8 @@ class $UserTable extends User with TableInfo<$UserTable, UserData> {
               type: DriftSqlType.int, requiredDuringInsert: false)
           .withConverter<FamilyIncome?>($UserTable.$converterfamilyIncomen);
   @override
-  List<GeneratedColumn> get $columns => [id, email, education, familyIncome];
+  List<GeneratedColumn> get $columns =>
+      [id, email, maritalStatus, education, familyIncome];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -4355,6 +4363,7 @@ class $UserTable extends User with TableInfo<$UserTable, UserData> {
     } else if (isInserting) {
       context.missing(_emailMeta);
     }
+    context.handle(_maritalStatusMeta, const VerificationResult.success());
     context.handle(_educationMeta, const VerificationResult.success());
     context.handle(_familyIncomeMeta, const VerificationResult.success());
     return context;
@@ -4370,6 +4379,9 @@ class $UserTable extends User with TableInfo<$UserTable, UserData> {
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       email: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}email'])!,
+      maritalStatus: $UserTable.$convertermaritalStatusn.fromSql(
+          attachedDatabase.typeMapping.read(
+              DriftSqlType.int, data['${effectivePrefix}marital_status'])),
       education: $UserTable.$convertereducationn.fromSql(attachedDatabase
           .typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}education'])),
@@ -4384,6 +4396,11 @@ class $UserTable extends User with TableInfo<$UserTable, UserData> {
     return $UserTable(attachedDatabase, alias);
   }
 
+  static JsonTypeConverter2<MaritalStatus, int, int> $convertermaritalStatus =
+      const EnumIndexConverter<MaritalStatus>(MaritalStatus.values);
+  static JsonTypeConverter2<MaritalStatus?, int?, int?>
+      $convertermaritalStatusn =
+      JsonTypeConverter2.asNullable($convertermaritalStatus);
   static JsonTypeConverter2<Education, int, int> $convertereducation =
       const EnumIndexConverter<Education>(Education.values);
   static JsonTypeConverter2<Education?, int?, int?> $convertereducationn =
@@ -4397,11 +4414,13 @@ class $UserTable extends User with TableInfo<$UserTable, UserData> {
 class UserData extends DataClass implements Insertable<UserData> {
   final int id;
   final String email;
+  final MaritalStatus? maritalStatus;
   final Education? education;
   final FamilyIncome? familyIncome;
   const UserData(
       {required this.id,
       required this.email,
+      this.maritalStatus,
       this.education,
       this.familyIncome});
   @override
@@ -4409,6 +4428,10 @@ class UserData extends DataClass implements Insertable<UserData> {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['email'] = Variable<String>(email);
+    if (!nullToAbsent || maritalStatus != null) {
+      map['marital_status'] = Variable<int>(
+          $UserTable.$convertermaritalStatusn.toSql(maritalStatus));
+    }
     if (!nullToAbsent || education != null) {
       map['education'] =
           Variable<int>($UserTable.$convertereducationn.toSql(education));
@@ -4424,6 +4447,9 @@ class UserData extends DataClass implements Insertable<UserData> {
     return UserCompanion(
       id: Value(id),
       email: Value(email),
+      maritalStatus: maritalStatus == null && nullToAbsent
+          ? const Value.absent()
+          : Value(maritalStatus),
       education: education == null && nullToAbsent
           ? const Value.absent()
           : Value(education),
@@ -4439,6 +4465,8 @@ class UserData extends DataClass implements Insertable<UserData> {
     return UserData(
       id: serializer.fromJson<int>(json['id']),
       email: serializer.fromJson<String>(json['email']),
+      maritalStatus: $UserTable.$convertermaritalStatusn
+          .fromJson(serializer.fromJson<int?>(json['maritalStatus'])),
       education: $UserTable.$convertereducationn
           .fromJson(serializer.fromJson<int?>(json['education'])),
       familyIncome: $UserTable.$converterfamilyIncomen
@@ -4451,6 +4479,8 @@ class UserData extends DataClass implements Insertable<UserData> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'email': serializer.toJson<String>(email),
+      'maritalStatus': serializer.toJson<int?>(
+          $UserTable.$convertermaritalStatusn.toJson(maritalStatus)),
       'education': serializer
           .toJson<int?>($UserTable.$convertereducationn.toJson(education)),
       'familyIncome': serializer.toJson<int?>(
@@ -4461,11 +4491,14 @@ class UserData extends DataClass implements Insertable<UserData> {
   UserData copyWith(
           {int? id,
           String? email,
+          Value<MaritalStatus?> maritalStatus = const Value.absent(),
           Value<Education?> education = const Value.absent(),
           Value<FamilyIncome?> familyIncome = const Value.absent()}) =>
       UserData(
         id: id ?? this.id,
         email: email ?? this.email,
+        maritalStatus:
+            maritalStatus.present ? maritalStatus.value : this.maritalStatus,
         education: education.present ? education.value : this.education,
         familyIncome:
             familyIncome.present ? familyIncome.value : this.familyIncome,
@@ -4474,6 +4507,9 @@ class UserData extends DataClass implements Insertable<UserData> {
     return UserData(
       id: data.id.present ? data.id.value : this.id,
       email: data.email.present ? data.email.value : this.email,
+      maritalStatus: data.maritalStatus.present
+          ? data.maritalStatus.value
+          : this.maritalStatus,
       education: data.education.present ? data.education.value : this.education,
       familyIncome: data.familyIncome.present
           ? data.familyIncome.value
@@ -4486,6 +4522,7 @@ class UserData extends DataClass implements Insertable<UserData> {
     return (StringBuffer('UserData(')
           ..write('id: $id, ')
           ..write('email: $email, ')
+          ..write('maritalStatus: $maritalStatus, ')
           ..write('education: $education, ')
           ..write('familyIncome: $familyIncome')
           ..write(')'))
@@ -4493,13 +4530,15 @@ class UserData extends DataClass implements Insertable<UserData> {
   }
 
   @override
-  int get hashCode => Object.hash(id, email, education, familyIncome);
+  int get hashCode =>
+      Object.hash(id, email, maritalStatus, education, familyIncome);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is UserData &&
           other.id == this.id &&
           other.email == this.email &&
+          other.maritalStatus == this.maritalStatus &&
           other.education == this.education &&
           other.familyIncome == this.familyIncome);
 }
@@ -4507,29 +4546,34 @@ class UserData extends DataClass implements Insertable<UserData> {
 class UserCompanion extends UpdateCompanion<UserData> {
   final Value<int> id;
   final Value<String> email;
+  final Value<MaritalStatus?> maritalStatus;
   final Value<Education?> education;
   final Value<FamilyIncome?> familyIncome;
   const UserCompanion({
     this.id = const Value.absent(),
     this.email = const Value.absent(),
+    this.maritalStatus = const Value.absent(),
     this.education = const Value.absent(),
     this.familyIncome = const Value.absent(),
   });
   UserCompanion.insert({
     this.id = const Value.absent(),
     required String email,
+    this.maritalStatus = const Value.absent(),
     this.education = const Value.absent(),
     this.familyIncome = const Value.absent(),
   }) : email = Value(email);
   static Insertable<UserData> custom({
     Expression<int>? id,
     Expression<String>? email,
+    Expression<int>? maritalStatus,
     Expression<int>? education,
     Expression<int>? familyIncome,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (email != null) 'email': email,
+      if (maritalStatus != null) 'marital_status': maritalStatus,
       if (education != null) 'education': education,
       if (familyIncome != null) 'family_income': familyIncome,
     });
@@ -4538,11 +4582,13 @@ class UserCompanion extends UpdateCompanion<UserData> {
   UserCompanion copyWith(
       {Value<int>? id,
       Value<String>? email,
+      Value<MaritalStatus?>? maritalStatus,
       Value<Education?>? education,
       Value<FamilyIncome?>? familyIncome}) {
     return UserCompanion(
       id: id ?? this.id,
       email: email ?? this.email,
+      maritalStatus: maritalStatus ?? this.maritalStatus,
       education: education ?? this.education,
       familyIncome: familyIncome ?? this.familyIncome,
     );
@@ -4556,6 +4602,10 @@ class UserCompanion extends UpdateCompanion<UserData> {
     }
     if (email.present) {
       map['email'] = Variable<String>(email.value);
+    }
+    if (maritalStatus.present) {
+      map['marital_status'] = Variable<int>(
+          $UserTable.$convertermaritalStatusn.toSql(maritalStatus.value));
     }
     if (education.present) {
       map['education'] =
@@ -4573,6 +4623,7 @@ class UserCompanion extends UpdateCompanion<UserData> {
     return (StringBuffer('UserCompanion(')
           ..write('id: $id, ')
           ..write('email: $email, ')
+          ..write('maritalStatus: $maritalStatus, ')
           ..write('education: $education, ')
           ..write('familyIncome: $familyIncome')
           ..write(')'))
@@ -7777,12 +7828,14 @@ typedef $$PrenatalAppointmentTableProcessedTableManager = ProcessedTableManager<
 typedef $$UserTableCreateCompanionBuilder = UserCompanion Function({
   Value<int> id,
   required String email,
+  Value<MaritalStatus?> maritalStatus,
   Value<Education?> education,
   Value<FamilyIncome?> familyIncome,
 });
 typedef $$UserTableUpdateCompanionBuilder = UserCompanion Function({
   Value<int> id,
   Value<String> email,
+  Value<MaritalStatus?> maritalStatus,
   Value<Education?> education,
   Value<FamilyIncome?> familyIncome,
 });
@@ -7800,6 +7853,11 @@ class $$UserTableFilterComposer extends Composer<_$AppDatabase, $UserTable> {
 
   ColumnFilters<String> get email => $composableBuilder(
       column: $table.email, builder: (column) => ColumnFilters(column));
+
+  ColumnWithTypeConverterFilters<MaritalStatus?, MaritalStatus, int>
+      get maritalStatus => $composableBuilder(
+          column: $table.maritalStatus,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
 
   ColumnWithTypeConverterFilters<Education?, Education, int> get education =>
       $composableBuilder(
@@ -7826,6 +7884,10 @@ class $$UserTableOrderingComposer extends Composer<_$AppDatabase, $UserTable> {
   ColumnOrderings<String> get email => $composableBuilder(
       column: $table.email, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<int> get maritalStatus => $composableBuilder(
+      column: $table.maritalStatus,
+      builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<int> get education => $composableBuilder(
       column: $table.education, builder: (column) => ColumnOrderings(column));
 
@@ -7848,6 +7910,10 @@ class $$UserTableAnnotationComposer
 
   GeneratedColumn<String> get email =>
       $composableBuilder(column: $table.email, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<MaritalStatus?, int> get maritalStatus =>
+      $composableBuilder(
+          column: $table.maritalStatus, builder: (column) => column);
 
   GeneratedColumnWithTypeConverter<Education?, int> get education =>
       $composableBuilder(column: $table.education, builder: (column) => column);
@@ -7882,24 +7948,28 @@ class $$UserTableTableManager extends RootTableManager<
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> email = const Value.absent(),
+            Value<MaritalStatus?> maritalStatus = const Value.absent(),
             Value<Education?> education = const Value.absent(),
             Value<FamilyIncome?> familyIncome = const Value.absent(),
           }) =>
               UserCompanion(
             id: id,
             email: email,
+            maritalStatus: maritalStatus,
             education: education,
             familyIncome: familyIncome,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required String email,
+            Value<MaritalStatus?> maritalStatus = const Value.absent(),
             Value<Education?> education = const Value.absent(),
             Value<FamilyIncome?> familyIncome = const Value.absent(),
           }) =>
               UserCompanion.insert(
             id: id,
             email: email,
+            maritalStatus: maritalStatus,
             education: education,
             familyIncome: familyIncome,
           ),

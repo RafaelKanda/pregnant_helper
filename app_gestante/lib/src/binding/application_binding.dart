@@ -6,7 +6,7 @@ import 'package:flutter_getit/flutter_getit.dart';
 class ApplicationBinding extends ApplicationBindings {
   @override
   List<Bind<Object>> bindings() => [
-        Bind.lazySingleton((i) => RestClient(Env.backendBaseUrl)),
-        Bind.lazySingleton((i) => AppDatabase()),
+        Bind.singleton((i) => RestClient(Env.backendBaseUrl)),
+        Bind.singleton((i) => AppDatabase()),
       ];
 }

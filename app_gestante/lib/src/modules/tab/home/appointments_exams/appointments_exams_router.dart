@@ -12,10 +12,10 @@ class AppointmentsExamsRouter extends FlutterGetItModulePageRouter {
 
   @override
   List<Bind<Object>> get bindings => [
-        Bind.lazySingleton<AppointmentsRepository>(
+        Bind.singleton<AppointmentsRepository>(
             (i) => AppointmentsRepositoryImpl()),
-        Bind.lazySingleton<ExamsRepository>((i) => ExamsRepositoryImpl()),
-        Bind.lazySingleton(
+        Bind.singleton<ExamsRepository>((i) => ExamsRepositoryImpl()),
+        Bind.singleton(
           (i) => AppointmentsExamsController(
             appointmentsRepository: i(),
             examsRepository: i(),

@@ -9,6 +9,7 @@ import 'package:app_gestante/src/modules/tab/childbirth/history/history_card.dar
 import 'package:app_gestante/src/modules/tab/childbirth/identification/identification_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_getit/flutter_getit.dart';
+import 'package:signals_flutter/signals_flutter.dart';
 
 class ChildbirthResumePage extends StatefulWidget {
   const ChildbirthResumePage({super.key});
@@ -19,6 +20,22 @@ class ChildbirthResumePage extends StatefulWidget {
 
 class _ChildbirthResumePageState extends State<ChildbirthResumePage> {
   final _controller = Injector.get<ChildbirthResumeController>();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) async {
+        effect(() async {
+          if (_controller.updated == true) {
+            await _controller.initialize().then(
+                  (value) => _controller.setUpdated(false),
+                );
+          }
+        });
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,26 +60,39 @@ class _ChildbirthResumePageState extends State<ChildbirthResumePage> {
       future: _controller.initialize(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          return Container(
-            padding: const EdgeInsets.all(20),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  IdentificationCard(pregnantData: _controller.pregnantData),
-                  const SizedBox(height: 10),
-                  HistoryCard(history: _controller.historyData),
-                  const SizedBox(height: 10),
-                  CurrentGestationCard(
-                      current: _controller.currentPregnancyData),
-                  const SizedBox(height: 10),
-                  ExpectationsCard(expectations: _controller.expectationsData),
-                  const SizedBox(height: 10),
-                  const BirthMomentCard(),
-                  const SizedBox(height: 10),
-                  const BirthExpectationsCard(),
-                  const SizedBox(height: 10),
-                  const DesiresExpectationsCard(),
-                ],
+          return Watch(
+            (_) => Visibility(
+              visible: !_controller.updated,
+              replacement: const Center(child: CircularProgressIndicator()),
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      IdentificationCard(
+                        pregnantData: _controller.pregnantData,
+                        edited: () => _controller.setUpdated(true),
+                      ),
+                      const SizedBox(height: 10),
+                      HistoryCard(
+                        history: _controller.historyData,
+                        edited: () => _controller.setUpdated(true),
+                      ),
+                      const SizedBox(height: 10),
+                      CurrentGestationCard(
+                          current: _controller.currentPregnancyData),
+                      const SizedBox(height: 10),
+                      ExpectationsCard(
+                          expectations: _controller.expectationsData),
+                      const SizedBox(height: 10),
+                      const BirthMomentCard(),
+                      const SizedBox(height: 10),
+                      const BirthExpectationsCard(),
+                      const SizedBox(height: 10),
+                      const DesiresExpectationsCard(),
+                    ],
+                  ),
+                ),
               ),
             ),
           );

@@ -5,9 +5,10 @@ import 'package:app_gestante/src/modules/tab/widgets/custom_item_tile.dart';
 import 'package:flutter/material.dart';
 
 class HistoryCard extends StatelessWidget {
-  const HistoryCard({super.key, required this.history});
+  const HistoryCard({super.key, required this.history, required this.edited});
 
   final PreviousPregnancy? history;
+  final VoidCallback edited;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +58,13 @@ class HistoryCard extends StatelessWidget {
             width: double.infinity,
             height: 48,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                // Navigator.pop(context);
+                // Navigator.pushNamed(context, '/update-childbirth/history')
+                //     .then((_) {
+                //   // Navigator.pushNamed(context, '/resume/');
+                // });
+              },
               child: const Text('Editar'),
             ),
           ),

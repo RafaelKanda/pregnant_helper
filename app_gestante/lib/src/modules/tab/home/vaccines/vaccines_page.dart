@@ -59,58 +59,65 @@ class _VaccinesPageState extends State<VaccinesPage> {
         child: Watch(
           (_) => Visibility(
             visible: !_controller.updated,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  const SizedBox(height: 16),
-                  const Align(
-                    alignment: Alignment.center,
+            child: _controller.vaccines.isEmpty
+                ? const Center(
                     child: Text(
-                      'Qualquer tempo',
-                      style: AppTheme.titleSmallStyle,
+                      'Carregando as vacinas',
+                      style: AppTheme.subTitleStyle,
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  Column(
-                    children: _controller.vaccines.map((vaccine) {
-                      if (vaccine.id < _controller.vaccines.length - 1) {
-                        return VaccineCard(
-                          used: vaccine.used,
+                  )
+                : SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 16),
+                        const Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Qualquer tempo',
+                            style: AppTheme.titleSmallStyle,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Column(
+                          children: _controller.vaccines.map((vaccine) {
+                            if (vaccine.id < _controller.vaccines.length - 1) {
+                              return VaccineCard(
+                                used: vaccine.used,
+                                onChanged: () {
+                                  _controller.updateVaccine(
+                                    vaccine.copyWith(used: !vaccine.used),
+                                  );
+                                },
+                                index: vaccine.id,
+                              );
+                            }
+                            return Container();
+                          }).toList(),
+                        ),
+                        const SizedBox(height: 32),
+                        const Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            '20ª semana de gravidez até 45 dias após o parto',
+                            textAlign: TextAlign.center,
+                            style: AppTheme.titleSmallStyle,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        VaccineCard(
+                          used: _controller.vaccines.last.used,
                           onChanged: () {
                             _controller.updateVaccine(
-                              vaccine.copyWith(used: !vaccine.used),
+                              _controller.vaccines.last.copyWith(
+                                used: !_controller.vaccines.last.used,
+                              ),
                             );
                           },
-                          index: vaccine.id,
-                        );
-                      }
-                      return Container();
-                    }).toList(),
-                  ),
-                  const SizedBox(height: 32),
-                  const Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      '20ª semana de gravidez até 45 dias após o parto',
-                      textAlign: TextAlign.center,
-                      style: AppTheme.titleSmallStyle,
+                          index: _controller.vaccines.last.id,
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  VaccineCard(
-                    used: _controller.vaccines.last.used,
-                    onChanged: () {
-                      _controller.updateVaccine(
-                        _controller.vaccines.last.copyWith(
-                          used: !_controller.vaccines.last.used,
-                        ),
-                      );
-                    },
-                    index: _controller.vaccines.last.id,
-                  ),
-                ],
-              ),
-            ),
           ),
         ),
       );

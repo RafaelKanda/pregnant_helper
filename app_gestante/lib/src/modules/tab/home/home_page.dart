@@ -1,8 +1,6 @@
 import 'package:app_core/app_core.dart';
 import 'package:app_gestante/src/core/extensions/size_extension.dart';
-import 'package:app_gestante/src/modules/tab/home/home_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_getit/flutter_getit.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,14 +10,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with MessageViewMixin {
-  final _controller = Injector.get<HomeController>();
-
-  @override
-  void initState() {
-    super.initState();
-    messageListener(_controller);
-  }
-
   @override
   Widget build(BuildContext context) {
     return _content;

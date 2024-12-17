@@ -8,13 +8,18 @@ import 'package:app_gestante/src/repositories/expectations/expectations_reposito
 import 'package:app_gestante/src/repositories/gestation/gestation_repository.dart';
 import 'package:app_gestante/src/repositories/history/history_repository.dart';
 import 'package:flutter_getit/flutter_getit.dart';
+import 'package:signals_flutter/signals_flutter.dart';
 
 class ChildbirthResumeController {
-  late final PregnantData? pregnantData;
-  late final PreviousPregnancy? historyData;
-  late final CurrentPregnancyData? currentPregnancyData;
-  late final Expectation? expectationsData;
+  PregnantData? pregnantData;
+  PreviousPregnancy? historyData;
+  CurrentPregnancyData? currentPregnancyData;
+  Expectation? expectationsData;
   bool initialized = false;
+
+  final _updated = signal<bool>(false);
+  bool get updated => _updated();
+  void setUpdated(bool value) => _updated.value = value;
 
   Future<void> initialize() async {
     if (!initialized) {

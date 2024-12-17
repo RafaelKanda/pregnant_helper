@@ -7,9 +7,11 @@ import 'package:app_gestante/src/modules/tab/widgets/custom_item_tile.dart';
 import 'package:flutter/material.dart';
 
 class IdentificationCard extends StatelessWidget {
-  const IdentificationCard({super.key, required this.pregnantData});
+  const IdentificationCard(
+      {super.key, required this.pregnantData, required this.edited});
 
   final PregnantData? pregnantData;
+  final VoidCallback edited;
 
   @override
   Widget build(BuildContext context) {
@@ -88,22 +90,27 @@ class IdentificationCard extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 10),
-        const Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            CustomItemTile(
-              flex: 1,
-              title: 'Maternidade',
-              content: 'Maternidade Benção',
-            ),
-          ],
-        ),
+        // const Row(
+        //   crossAxisAlignment: CrossAxisAlignment.end,
+        //   children: [
+        //     CustomItemTile(
+        //       flex: 1,
+        //       title: 'Maternidade',
+        //       content: 'Maternidade Benção',
+        //     ),
+        //   ],
+        // ),
         const SizedBox(height: 16),
         SizedBox(
           width: double.infinity,
           height: 48,
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              //   Navigator.pushNamed(
+              //   context,
+              //   '/update-childbirth/identification',
+              // ).then((value) => edited());
+            },
             child: const Text('Editar'),
           ),
         ),
@@ -112,7 +119,7 @@ class IdentificationCard extends StatelessWidget {
   }
 
   String _getAge() {
-    if (pregnantData!.birthDate.isNotEmpty || pregnantData?.birthDate != null) {
+    if (pregnantData!.birthDate.isNotEmpty && pregnantData?.birthDate != null) {
       final birth = DateTime.parse(_transformDate(pregnantData!.birthDate));
       final today = DateTime.now();
       log(today.toString());
@@ -120,7 +127,7 @@ class IdentificationCard extends StatelessWidget {
       log((age.inDays / 365.25).toInt().toString());
       return (age.inDays / 365.25).toInt().toString();
     }
-    return '';
+    return '-';
   }
 
   String _transformDate(String date) {
